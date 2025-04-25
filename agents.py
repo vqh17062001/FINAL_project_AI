@@ -53,7 +53,10 @@ class GoAgent:
         
         self.total_moves += 1
         self.total_time += (end_time - start_time)
-        self.total_memory += (end_memory - start_memory)
+        
+        # Đảm bảo chỉ cộng giá trị dương vào total_memory
+        memory_used = max(0, end_memory - start_memory)
+        self.total_memory += memory_used
         
         return move
     

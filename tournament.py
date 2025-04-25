@@ -108,7 +108,7 @@ def run_tournament(board_sizes=[9, 13, 19], num_games=10, depth=2, save_dir=None
         print(f"  Liberty Count Agent: {liberty_count_memory:.2f} MB")
     
     # Plot tournament results
-    plot_tournament_results(board_sizes, results, save_dir)
+    plot_tournament_results(board_sizes, results, save_dir, depth, num_games)
 
 def play_games(black_agent, white_agent, board_size, num_games):
     """
@@ -151,7 +151,7 @@ def play_games(black_agent, white_agent, board_size, num_games):
     
     return analytics
 
-def plot_tournament_results(board_sizes, results, save_dir=None):
+def plot_tournament_results(board_sizes, results, save_dir=None, depth=2, num_games=10):
     """
     Plot tournament results.
     
@@ -159,9 +159,16 @@ def plot_tournament_results(board_sizes, results, save_dir=None):
         board_sizes (list): List of board sizes
         results (dict): Tournament results
         save_dir (str, optional): Directory to save plot images
+        depth (int): Search depth used for agents
+        num_games (int): Number of games played for each configuration
     """
     # Convert board sizes to strings for plotting
     board_size_labels = [f"{size}x{size}" for size in board_sizes]
+    
+    # Tạo tiền tố tên file với thông tin về độ sâu và số lượng game
+    file_prefix = f"depth{depth}_games{num_games}_"
+    # Tạo phần thông tin bàn cờ để thêm vào tên file
+    board_info = "x".join([str(size) for size in board_sizes])
     
     # Plot win rates
     plt.figure(figsize=(12, 6))
@@ -187,13 +194,13 @@ def plot_tournament_results(board_sizes, results, save_dir=None):
     
     plt.xlabel('Board Size')
     plt.ylabel('Win Rate')
-    plt.title('Agent Win Rates by Board Size')
+    plt.title(f'Agent Win Rates by Board Size (Depth: {depth}, Games: {num_games})')
     plt.xticks(index, board_size_labels)
     plt.legend()
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     
     if save_dir:
-        plt.savefig(os.path.join(save_dir, 'win_rates_by_board_size.png'))
+        plt.savefig(os.path.join(save_dir, f'{file_prefix}win_rates_{board_info}.png'))
     else:
         plt.show()
     
@@ -204,13 +211,13 @@ def plot_tournament_results(board_sizes, results, save_dir=None):
     
     plt.xlabel('Board Size')
     plt.ylabel('Average Time per Move (seconds)')
-    plt.title('Agent Performance: Time per Move')
+    plt.title(f'Agent Performance: Time per Move (Depth: {depth}, Games: {num_games})')
     plt.xticks(index, board_size_labels)
     plt.legend()
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     
     if save_dir:
-        plt.savefig(os.path.join(save_dir, 'time_by_board_size.png'))
+        plt.savefig(os.path.join(save_dir, f'{file_prefix}time_{board_info}.png'))
     else:
         plt.show()
     
@@ -221,13 +228,13 @@ def plot_tournament_results(board_sizes, results, save_dir=None):
     
     plt.xlabel('Board Size')
     plt.ylabel('Average Memory Usage per Move (MB)')
-    plt.title('Agent Performance: Memory Usage')
+    plt.title(f'Agent Performance: Memory Usage (Depth: {depth}, Games: {num_games})')
     plt.xticks(index, board_size_labels)
     plt.legend()
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     
     if save_dir:
-        plt.savefig(os.path.join(save_dir, 'memory_by_board_size.png'))
+        plt.savefig(os.path.join(save_dir, f'{file_prefix}memory_{board_info}.png'))
         plt.close()
     else:
         plt.show()
