@@ -27,6 +27,27 @@ pip install numpy pygame matplotlib psutil
 - `game_analytics.py`: Thu thập và phân tích số liệu về hiệu suất của các agent
 - `tournament.py`: Chạy giải đấu so sánh hiệu suất giữa các agent
 
+## Cấu trúc thư mục kết quả (results)
+
+Các file trong thư mục kết quả tuân theo quy ước đặt tên như sau:
+
+```
+depth{độ_sâu}_games{số_trận}_{loại_biểu_đồ}_{kích_thước_bàn}.png
+```
+
+Trong đó:
+- `{độ_sâu}`: Độ sâu tìm kiếm được sử dụng trong giải đấu (ví dụ: depth2)
+- `{số_trận}`: Số trận đấu đã chơi cho mỗi cấu hình (ví dụ: games10)
+- `{loại_biểu_đồ}`: Loại biểu đồ, có thể là:
+  - `win_rates`: Biểu đồ tỷ lệ thắng của các agent
+  - `time`: Biểu đồ thời gian trung bình mỗi nước đi
+  - `memory`: Biểu đồ sử dụng bộ nhớ và tổng bộ nhớ
+- `{kích_thước_bàn}`: Kích thước bàn cờ được sử dụng (ví dụ: 9 cho bàn 9x9)
+
+Ví dụ: `depth2_games10_memory_9.png` là biểu đồ sử dụng bộ nhớ cho giải đấu chạy với độ sâu 2, 10 trận đấu, trên bàn cờ 9x9.
+
+Khi có nhiều kích thước bàn cờ được sử dụng, tên file sẽ liệt kê tất cả các kích thước, ví dụ: `depth2_games10_memory_9x13x19.png`.
+
 ## Hướng dẫn sử dụng
 
 ### Chạy trò chơi với giao diện đồ họa

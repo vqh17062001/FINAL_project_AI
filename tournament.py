@@ -221,17 +221,54 @@ def plot_tournament_results(board_sizes, results, save_dir=None, depth=2, num_ga
     else:
         plt.show()
     
+    # Calculate total memory usage - multiply by number of games to get a more accurate total
+    # This represents the total memory used across all board sizes
+    stone_count_total_memory = sum(mem * num_games * 2 for mem in results['stone_count_memory'])
+    liberty_count_total_memory = sum(mem * num_games * 2 for mem in results['liberty_count_memory'])
+    
+    # Scale the memory values appropriately for display
+    # If values are too small, convert to KB
+    if stone_count_total_memory < 0.01 and liberty_count_total_memory < 0.01:
+        stone_count_total_memory *= 1024  # Convert to KB
+        liberty_count_total_memory *= 1024
+        memory_unit = "KB"
+    else:
+        memory_unit = "MB"
+    
     # Plot memory
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=(12, 8))
+    
+    # Plot average memory per move
+    plt.subplot(2, 1, 1)
     plt.bar(index - bar_width/2, results['stone_count_memory'], bar_width, label='Stone Count Agent')
     plt.bar(index + bar_width/2, results['liberty_count_memory'], bar_width, label='Liberty Count Agent')
     
     plt.xlabel('Board Size')
     plt.ylabel('Average Memory Usage per Move (MB)')
-    plt.title(f'Agent Performance: Memory Usage (Depth: {depth}, Games: {num_games})')
+    plt.title(f'Agent Performance: Average Memory Usage per Move (Depth: {depth}, Games: {num_games})')
     plt.xticks(index, board_size_labels)
     plt.legend()
     plt.grid(axis='y', linestyle='--', alpha=0.7)
+    
+    # Plot total memory
+    plt.subplot(2, 1, 2)
+    plt.bar([0], [stone_count_total_memory], bar_width*2, label='Stone Count Agent')
+    plt.bar([1], [liberty_count_total_memory], bar_width*2, label='Liberty Count Agent')
+    
+    plt.xlabel('Agent Type')
+    plt.ylabel(f'Total Memory Usage ({memory_unit})')
+    plt.title(f'Agent Performance: TỔNG BỘ NHỚ SỬ DỤNG (Depth: {depth}, Games: {num_games})')
+    plt.xticks([0, 1], ['Stone Count Agent', 'Liberty Count Agent'])
+    plt.legend()
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    
+    # Annotate total memory values with 4 decimal places for small numbers
+    plt.text(0, stone_count_total_memory, f'{stone_count_total_memory:.4f} {memory_unit}', 
+             ha='center', va='bottom', fontweight='bold')
+    plt.text(1, liberty_count_total_memory, f'{liberty_count_total_memory:.4f} {memory_unit}', 
+             ha='center', va='bottom', fontweight='bold')
+    
+    plt.tight_layout()
     
     if save_dir:
         plt.savefig(os.path.join(save_dir, f'{file_prefix}memory_{board_info}.png'))
